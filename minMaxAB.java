@@ -17,7 +17,8 @@ public class minMaxAB {
     private ValueStructure minMax(Board position, int depth, Player player, int useThresh, int passThresh) {
         ValueStructure currValueStructure = new ValueStructure();
         ArrayList<Board> currPath = new ArrayList<>(); //Used to temporarily store best path
-        if (deepEnough(depth)) {            
+        if (deepEnough(depth)) {
+            currValueStructure.boardsEvaluatedCount++;
             currValueStructure.setValue(Static(position, player));            
             //currValueStructure.addToPath(position); //should be null
             return currValueStructure;
@@ -36,6 +37,8 @@ public class minMaxAB {
 
         for (Board v : successors) {
             ValueStructure resultSucc = minMax(v, (depth + 1), switchPlayer(player), ((-1) * passThresh), ((-1) * useThresh));
+            currValueStructure.boardsEvaluatedCount += resultSucc.boardsEvaluatedCount;
+            currValueStructure.pruneCount+=resultSucc.pruneCount;
             int newValue = ((resultSucc.getValue() * (-1))); //new value
             if (newValue > passThresh) { //Better child board found
                 passThresh = newValue;
@@ -44,6 +47,7 @@ public class minMaxAB {
                 currPath.addAll(resultSucc.getPath());
             }
             if (passThresh >= useThresh) { //Prune
+                currValueStructure.pruneCount++;
                 currValueStructure.setValue(passThresh);
                 currValueStructure.addToPath(currPath);
                 return currValueStructure;

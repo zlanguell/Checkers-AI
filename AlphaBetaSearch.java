@@ -15,11 +15,11 @@ public class AlphaBetaSearch {
     
     private static final int MAX_DEPTH = 6;
     
-    public ValueStructure start(Board b){
-        return alphaBetaSearch(b);
+    public ValueStructure start(Board b, minMaxAB.Player p){
+        return alphaBetaSearch(b, p);
     }
-    private ValueStructure alphaBetaSearch(Board b){
-        return maxValue(b, Integer.MAX_VALUE, Integer.MIN_VALUE, 0);         
+    private ValueStructure alphaBetaSearch(Board b, minMaxAB.Player p){
+        return maxValue(b,  Integer.MIN_VALUE, Integer.MAX_VALUE, 0, p);         
     }
     
     /**
@@ -30,18 +30,23 @@ public class AlphaBetaSearch {
      * @param depth
      * @return 
      */
-    private ValueStructure maxValue(Board b, int alpha, int beta, int depth){
+    private ValueStructure maxValue(Board b, int alpha, int beta, int depth, minMaxAB.Player p){
         ValueStructure currValStruct = new ValueStructure();
         ArrayList<Board> currPath = null;
+        
         if (b.getTerminal()==true || depth > MAX_DEPTH){
             currValStruct.boardsEvaluatedCount++;
             currValStruct.setValue(evalFunc.getScore(b, minMaxAB.Player.max));
             return currValStruct;
         }
         currValStruct.setValue(Integer.MIN_VALUE);
-        ArrayList<Board> successors = blackMoveGen(b);
+        ArrayList<Board> successors;
+        if(p == minMaxAB.Player.max){
+            successors = blackMoveGen(b);
+        }
+        else{successors = whiteMoveGen(b);}
         for(Board s : successors){
-            ValueStructure v = minValue(s, alpha, beta, ++depth);
+            ValueStructure v = minValue(s, alpha, beta, ++depth, switchPlayer(p));
             currValStruct.boardsEvaluatedCount+=v.boardsEvaluatedCount;
             currValStruct.pruneCount+=v.pruneCount;
             int x = v.getValue();
@@ -69,9 +74,10 @@ public class AlphaBetaSearch {
      * @param depth
      * @return 
      */
-    private ValueStructure minValue(Board b, int alpha, int beta, int depth){
+    private ValueStructure minValue(Board b, int alpha, int beta, int depth, minMaxAB.Player p){
         ValueStructure currValStruct = new ValueStructure();
         ArrayList<Board> currPath = null;
+        
         if (b.getTerminal()==true || depth > MAX_DEPTH){
             currValStruct.boardsEvaluatedCount++;
             currValStruct.setValue(evalFunc.getScore(b, minMaxAB.Player.max));
@@ -79,9 +85,13 @@ public class AlphaBetaSearch {
         }
         
         currValStruct.setValue(Integer.MAX_VALUE);
-        ArrayList<Board> successors = whiteMoveGen(b);
+        ArrayList<Board> successors;
+        if(p == minMaxAB.Player.max){
+            successors = blackMoveGen(b);
+        }
+        else{successors = whiteMoveGen(b);}
         for(Board s : successors){ 
-            ValueStructure v = maxValue(s, alpha, beta, ++depth);
+            ValueStructure v = maxValue(s, alpha, beta, ++depth, switchPlayer(p));
             currValStruct.boardsEvaluatedCount+=v.boardsEvaluatedCount;
             currValStruct.pruneCount+=v.pruneCount;
             int x = v.getValue();
@@ -331,5 +341,12 @@ public class AlphaBetaSearch {
         
         }
         return children;
+    }
+    
+     private minMaxAB.Player switchPlayer(minMaxAB.Player currPlayer) {
+        if (currPlayer == minMaxAB.Player.max) {
+            return minMaxAB.Player.min;
+        }
+        return minMaxAB.Player.max;
     }
 }

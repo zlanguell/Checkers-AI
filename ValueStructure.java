@@ -46,9 +46,9 @@ public class ValueStructure {
         //}
     }
     public void addToPath(ArrayList<Board> newPath) {
-        //if (!newPath.isEmpty()) {
+       if (newPath != null) {
             path.addAll(newPath);
-       // }
+       }
     }
 
     @Override
