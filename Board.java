@@ -7,10 +7,15 @@ import java.util.HashMap;
 /**
  * ****************************************************************************
  * CHECKERS
- *
- * |01|02|03|04|05|06|07|08| |09|10|11|12|13|14|15|16| |17|18|19|20|21|22|23|24|
- * |25|26|27|28|29|30|31|32| |33|34|35|36|37|38|39|40| |41|42|43|44|45|46|47|48|
- * |49|50|51|52|53|54|55|56| |57|58|59|60|61|62|63|64|
+ *      1  2  3  4  5  6  7  8
+ *  A |01|02|03|04|05|06|07|08|
+ *  B |09|10|11|12|13|14|15|16|
+ *  C |17|18|19|20|21|22|23|24|
+ *  D |25|26|27|28|29|30|31|32| 
+ *  E |33|34|35|36|37|38|39|40|
+ *  F |41|42|43|44|45|46|47|48|
+ *  G |49|50|51|52|53|54|55|56| 
+ *  H |57|58|59|60|61|62|63|64|
  *
  *
  * Player Max: -Black Tokens -Computer Controlled -Starts Top Border
@@ -21,6 +26,9 @@ import java.util.HashMap;
  */
 public class Board {
 
+    /**
+     *
+     */
     public int depth;
     private static final int DIMENSION = 8;
     private HashMap<String, Integer> boardMapper = new HashMap<>();
@@ -78,13 +86,33 @@ public class Board {
     private ArrayList<Integer> kWhite = new ArrayList<>();
     private float value;
     private boolean terminal;
+    public enum Player {
 
+        /**
+         *
+         *//**
+         *
+         */
+        white,
+
+        /**
+         *
+         */
+        black
+    }
+    /**
+     *
+     */
     public Board() {
         value = 0;
         terminal = false;
         populateBoardMapper();
     }
 
+    /**
+     *
+     * @param b
+     */
     public Board(Board b) {
         this.white = b.getWhite();
         this.black = b.getBlack();
@@ -106,10 +134,19 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public int mapValue(String s) {
         return boardMapper.get(s);
     }
 
+    /**
+     *
+     * @return
+     */
     public static Board getStartBoard() {
         Board b = new Board();
         b.setBlack(new ArrayList<>(Arrays.asList(2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 22, 24)));
@@ -117,80 +154,157 @@ public class Board {
         return b;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getTerminal() {
         return this.terminal;
     }
 
+    /**
+     *
+     */
     public void setTerminal() {
         this.terminal = true;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getRightBorder() {
         return rightBorder;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getLeftBorder() {
         return leftBorder;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getBottomBorder() {
         return bottomBorder;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getTopBorder() {
         return topBorder;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDIMENSION() {
         return DIMENSION;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getWhite() {
         return new ArrayList<>(this.white);
     }
 
+    /**
+     *
+     * @param white
+     */
     public void setWhite(ArrayList<Integer> white) {
         this.white = white;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getkWhite() {
         return new ArrayList<>(this.kWhite);
     }
 
+    /**
+     *
+     * @param kWhite
+     */
     public void setkWhite(ArrayList<Integer> kWhite) {
         this.kWhite = kWhite;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getBlack() {
         return new ArrayList<>(this.black);
     }
 
+    /**
+     *
+     * @param black
+     */
     public void setBlack(ArrayList<Integer> black) {
         this.black = black;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getkBlack() {
         return new ArrayList<>(this.kBlack);
     }
 
+    /**
+     *
+     * @param kBlack
+     */
     public void setkBlack(ArrayList<Integer> kBlack) {
         this.kBlack = kBlack;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getValue() {
         return value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(float value) {
         this.value = value;
     }
 
+    /**
+     *
+     * @param space
+     * @return
+     */
     public boolean isEmpty(int space) {
 
         return (!white.contains(space) && !black.contains(space)
                 && !kWhite.contains(space) && !kBlack.contains(space));
     }
 
+    /**
+     *
+     * @param oldp
+     * @param newp
+     */
     public void moveBlack(int oldp, int newp) {
         /*System.out.println("Before Black");
         this.printBoard();*/
@@ -220,6 +334,11 @@ public class Board {
         System.out.println("\n\n");*/
     }
 
+    /**
+     *
+     * @param oldp
+     * @param newp
+     */
     public void moveWhite(int oldp, int newp) {
         /*System.out.println("Before White:");
         this.printBoard();*/
@@ -248,6 +367,9 @@ public class Board {
         System.out.println("\n\n");*/
     }
 
+    /**
+     *
+     */
     public void printBoard() {
         int n = getDIMENSION();
         ArrayList<Integer> bP = getBlack();
@@ -295,6 +417,13 @@ public class Board {
     }
 
     //***************MOVE VALIDATION************************//
+
+    /**
+     *
+     * @param currMove
+     * @param newMove
+     * @return
+     */
     public boolean isValidMove(String currMove, String newMove) {
         //convert B1 to 9
         int parsedCurrMove;
@@ -357,6 +486,11 @@ public class Board {
         return false;
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canMoveForwardLeft(int pos) {
         int pos2 = pos + (this.getDIMENSION() - 1);
         if (this.getBottomBorder().contains(pos) || this.getLeftBorder().contains(pos)
@@ -369,6 +503,11 @@ public class Board {
 
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canMoveForwardRight(int pos) {
         int pos2 = pos + (this.getDIMENSION() + 1);
         if (this.getBottomBorder().contains(pos) || this.getRightBorder().contains(pos)
@@ -380,6 +519,11 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canMoveRearLeft(int pos) {
         int pos2 = pos - (this.getDIMENSION() + 1);
         if (this.getTopBorder().contains(pos) || this.getLeftBorder().contains(pos)
@@ -391,6 +535,11 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canMoveRearRight(int pos) {
         int pos2 = pos - (this.getDIMENSION() - 1);
         if (this.getTopBorder().contains(pos) || this.getRightBorder().contains(pos)
@@ -402,6 +551,11 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canJumpForwardLeft(int pos) {
         ArrayList<Integer> enemy = this.getEnemies(pos);
         int pos2 = pos + (DIMENSION - 1);
@@ -413,6 +567,11 @@ public class Board {
         return false;
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canJumpForwardRight(int pos) {
         ArrayList<Integer> enemy = this.getEnemies(pos);
         int pos2 = pos + (DIMENSION + 1);
@@ -424,6 +583,11 @@ public class Board {
         return false;
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canJumpRearLeft(int pos) {
         ArrayList<Integer> enemy = this.getEnemies(pos);
         int pos2 = pos - (DIMENSION + 1);
@@ -435,6 +599,11 @@ public class Board {
         return false;
     }
 
+    /**
+     *
+     * @param pos
+     * @return
+     */
     public boolean canJumpRearRight(int pos) {
         ArrayList<Integer> enemy = this.getEnemies(pos);
         int pos2 = pos - (DIMENSION - 1);
@@ -459,6 +628,10 @@ public class Board {
         return enemy;
     }
 
+    /**
+     *
+     * @return
+     */
     public Board cloneBoard() {
         Board child = new Board();
         child.setBlack(this.getBlack());
@@ -514,7 +687,12 @@ public class Board {
         }
         return s.toString();
     }
-     public String getWinner() {
+
+    /**
+     *
+     * @return
+     */
+    public String getWinner() {
         if (this.getkWhite().size() + this.getWhite().size() == 0)
             return "Player with Black pieces is the winner";
         else if (this.getBlack().size() + this.getkBlack().size() == 0) {

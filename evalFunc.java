@@ -8,6 +8,10 @@ package CheckersAI;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ *
+ * @author Zachary
+ */
 public class evalFunc {
 
     private static final int PAWN_VALUE = 200;
@@ -18,7 +22,13 @@ public class evalFunc {
     private static final int JUMP_KING = 50;
     private static final int KING_DEFENSE = 35;
 
-    public static int getScore(Board b, minMaxAB.Player p) {
+    /**
+     *
+     * @param b
+     * @param p
+     * @return
+     */
+    public static int getScore(Board b, Board.Player p) {
         float bValue = 0;//new Random().nextInt(9999);
         float wValue = 0;//new Random().nextInt(9999);
         ArrayList<Integer> wPieces = b.getWhite();
@@ -26,7 +36,10 @@ public class evalFunc {
         ArrayList<Integer> bPieces = b.getBlack();
         ArrayList<Integer> bK_Pieces = b.getkBlack();
         int n = b.getDIMENSION();
-
+        //float wratio = ((wPieces.size()+ wK_Pieces.size())/(bPieces.size() + bK_Pieces.size() + 1));        
+        //float bratio = ((bPieces.size()+ bK_Pieces.size())/(wPieces.size() + wK_Pieces.size() + 1));        
+        
+        
         bValue += b.getBlack().size() * PAWN_VALUE;
         bValue += b.getkBlack().size() * KING_VALUE;
         wValue += b.getWhite().size() * PAWN_VALUE;
@@ -44,6 +57,9 @@ public class evalFunc {
             if(b.getTopBorder().contains(i)){
                 bValue+=KING_DEFENSE;
             }
+//            if(b.getWhite().isEmpty() && b.getkWhite().isEmpty()){                
+//                bValue+=150000;
+//            }
             if (b.canJumpForwardLeft(i)) { // check left foward jump
                 if (wK_Pieces.contains(i + (n - 1))) {
                     bValue += JUMP_KING;
@@ -106,6 +122,9 @@ public class evalFunc {
             if(b.getBottomBorder().contains(i)){
                 wValue+=KING_DEFENSE;
             }
+//            if(b.getBlack().isEmpty() && b.getkBlack().isEmpty()){
+//                wValue+=150000;
+//            }
             if (b.canJumpRearLeft(i)) { // check left rear jump
                 if (bK_Pieces.contains(i - (n + 1))) {
                     wValue += JUMP_KING;
@@ -156,10 +175,13 @@ public class evalFunc {
                 }
             }
         }
-
-        if (p == minMaxAB.Player.max) {
+//        if(p == minMaxAB.Player.black){return (int)bValue;}
+//        return (int)wValue;
+        
+        if (p == Board.Player.black) {
             return (int) (bValue - wValue);
-        } else if (b.getTerminal() && p == minMaxAB.Player.min) {
+        } 
+        else if (b.getTerminal() && p == Board.Player.white) {
             return (-1) * (int) (bValue - wValue);
         }
         return (int) (wValue - bValue);
@@ -168,7 +190,14 @@ public class evalFunc {
     
     
     //WRITTEN BY NEERAJ JADHAV
-    public static int getScore2(Board b, minMaxAB.Player p) {
+
+    /**
+     *
+     * @param b
+     * @param p
+     * @return
+     */
+    public static int getScore2(Board b, Board.Player p) {
 
         int bValue = 0;//new Random().nextInt(9999);
         int wValue = 0;//new Random().nextInt(9999);
@@ -216,12 +245,11 @@ public class evalFunc {
             }
         }
 
-        if (p == minMaxAB.Player.max) {
-            return (bValue - wValue);
-        } else if (b.getTerminal() && p == minMaxAB.Player.min) {
-            return (-1) * (bValue - wValue);
-        }
-        return (wValue - bValue);
+        if (p == Board.Player.black) {
+            return (bValue);
+        } else {
+            return (-1) * (wValue);
+        }        
 }
 
 }
