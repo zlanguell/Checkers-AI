@@ -165,5 +165,63 @@ public class evalFunc {
         return (int) (wValue - bValue);
 //          return (int) (bValue-wValue);
     }
+    
+    
+    //WRITTEN BY NEERAJ JADHAV
+    public static int getScore2(Board b, minMaxAB.Player p) {
+
+        int bValue = 0;//new Random().nextInt(9999);
+        int wValue = 0;//new Random().nextInt(9999);
+
+        ArrayList<Integer> wPieces = b.getWhite();
+        ArrayList<Integer> wK_Pieces = b.getkWhite();
+        ArrayList<Integer> bPieces = b.getBlack();
+        ArrayList<Integer> bK_Pieces = b.getkBlack();
+        int n = b.getDIMENSION();
+
+        bValue += b.getBlack().size() * 100;
+        bValue += b.getkBlack().size() * 200;
+        wValue += b.getWhite().size() * 100;
+        wValue += b.getkWhite().size() * 200;
+
+        //Evaluate jumps for Black pieces
+        for (Integer i : bPieces) {
+            if (b.canJumpForwardLeft(i) || b.canJumpForwardRight(i)) // check left foward jump
+            {
+                bValue += 50;
+            }
+        }
+        //Evaluate black king pieces
+        for (Integer i : bK_Pieces) {
+            if (b.canJumpForwardLeft(i) || b.canJumpRearLeft(i) || b.canJumpForwardRight(i) || b.canJumpRearRight(i)) { // check left foward jump
+                bValue += 50;
+            }
+            //Evaluate jumps for White pieces
+            if (b.canJumpRearLeft(i) || b.canJumpRearRight(i)) { // check left rear jump
+                wValue += 50;
+
+            }
+        }
+        //Evaluate jumps for white pieces
+        for (Integer i : wPieces) {
+            if (b.canJumpForwardLeft(i) || b.canJumpForwardRight(i)) // check left foward jump
+            {
+                bValue += 50;
+            }
+        }
+        //Evaluate jumps for KING White pieces
+        for (Integer i : wK_Pieces) {
+            if (b.canJumpForwardLeft(i) || b.canJumpForwardRight(i) || b.canJumpRearLeft(i) || b.canJumpRearRight(i)) { // check left foward jump
+                wValue += 50;
+            }
+        }
+
+        if (p == minMaxAB.Player.max) {
+            return (bValue - wValue);
+        } else if (b.getTerminal() && p == minMaxAB.Player.min) {
+            return (-1) * (bValue - wValue);
+        }
+        return (wValue - bValue);
+}
 
 }
