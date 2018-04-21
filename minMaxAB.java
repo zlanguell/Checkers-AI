@@ -40,7 +40,10 @@ public class minMaxAB {
         if (successors.isEmpty()) {
             position.setTerminal();
             currValueStructure.setValue(Static(position, player));
-            currValueStructure.addToPath(position);
+            currPath = new ArrayList<>();
+            currPath.add(position);
+            currValueStructure.addToPath(currPath);
+           // currValueStructure.addToPath(position);
             return currValueStructure;
         }
 

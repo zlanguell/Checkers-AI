@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class AlphaBetaSearch {
     
-    private static final int MAX_DEPTH = 14;
+    private static final int MAX_DEPTH = 10;
     private int scoreOption=1;
     
     /**
@@ -62,6 +62,17 @@ public class AlphaBetaSearch {
             successors = blackMoveGen(b);
         }
         else{successors = whiteMoveGen(b);}
+        if (successors.isEmpty()){
+            b.setTerminal();
+            currValStruct.boardsEvaluatedCount++;
+            if(scoreOption == 1){
+                currValStruct.setValue(evalFunc.getScore(b, switchPlayer(p)));
+            }
+            else{
+                currValStruct.setValue(evalFunc.getScore2(b, switchPlayer(p)));
+            }
+            return currValStruct;
+        }
         for(Board s : successors){
             ValueStructure v = minValue(s, alpha, beta, ++depth, switchPlayer(p));
             currValStruct.boardsEvaluatedCount+=v.boardsEvaluatedCount;
@@ -102,7 +113,7 @@ public class AlphaBetaSearch {
             }
             else{
                 currValStruct.setValue(evalFunc.getScore2(b, switchPlayer(p)));
-            }           
+            }
             return currValStruct;
         }
         
@@ -112,6 +123,18 @@ public class AlphaBetaSearch {
             successors = blackMoveGen(b);
         }
         else{successors = whiteMoveGen(b);}
+        
+        if (successors.isEmpty()){
+            b.setTerminal();
+            currValStruct.boardsEvaluatedCount++;
+            if(scoreOption == 1){
+                currValStruct.setValue(evalFunc.getScore(b, switchPlayer(p)));
+            }
+            else{
+                currValStruct.setValue(evalFunc.getScore2(b, switchPlayer(p)));
+            }
+            return currValStruct;
+        }
         for(Board s : successors){ 
             ValueStructure v = maxValue(s, alpha, beta, ++depth, switchPlayer(p));
             currValStruct.boardsEvaluatedCount+=v.boardsEvaluatedCount;
@@ -128,7 +151,7 @@ public class AlphaBetaSearch {
                 return currValStruct;
             }
             beta = Integer.min(beta, currValStruct.getValue());
-        }
+        }  
         currValStruct.addToPath(currPath);
         return currValStruct;
     }

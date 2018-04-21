@@ -614,6 +614,7 @@ public class Board {
         }
         return false;
     }
+    
 //***************END MOVE VALIDATION************************//
 
     private ArrayList<Integer> getEnemies(int pos) {

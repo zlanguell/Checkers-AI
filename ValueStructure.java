@@ -102,9 +102,9 @@ public class ValueStructure {
      * @param newPath
      */
     public void addToPath(ArrayList<Board> newPath) {
-       if (newPath != null) {
+       //if (newPath != null) {
             path.addAll(newPath);
-       }
+       //}
     }
 
     @Override

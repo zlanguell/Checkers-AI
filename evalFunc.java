@@ -57,9 +57,9 @@ public class evalFunc {
             if(b.getTopBorder().contains(i)){
                 bValue+=KING_DEFENSE;
             }
-//            if(b.getWhite().isEmpty() && b.getkWhite().isEmpty()){                
-//                bValue+=150000;
-//            }
+            if(wPieces.isEmpty() && wK_Pieces.isEmpty()){                
+                bValue+=1000;
+            }
             if (b.canJumpForwardLeft(i)) { // check left foward jump
                 if (wK_Pieces.contains(i + (n - 1))) {
                     bValue += JUMP_KING;
@@ -76,8 +76,13 @@ public class evalFunc {
             }
         }
         for (Integer i : bK_Pieces) {
-            if(b.getTopBorder().contains(i)){
-                bValue+=KING_DEFENSE;
+//            if(b.getTopBorder().contains(i)){
+//                bValue+=KING_DEFENSE;
+//            }
+            if(wK_Pieces.size() + wPieces.size() < 3){
+                  if(b.canJumpForwardLeft(i) || b.canJumpForwardRight(i) 
+                          || b.canJumpRearLeft(i) || b.canJumpRearRight(i))
+                      bValue += 150;
             }
             if (b.canJumpForwardLeft(i)) { // check left foward jump
                 if (wK_Pieces.contains(i + (n - 1))) {
@@ -122,9 +127,9 @@ public class evalFunc {
             if(b.getBottomBorder().contains(i)){
                 wValue+=KING_DEFENSE;
             }
-//            if(b.getBlack().isEmpty() && b.getkBlack().isEmpty()){
-//                wValue+=150000;
-//            }
+            if(bPieces.isEmpty() && bK_Pieces.isEmpty()){
+                wValue+=1000;
+            }
             if (b.canJumpRearLeft(i)) { // check left rear jump
                 if (bK_Pieces.contains(i - (n + 1))) {
                     wValue += JUMP_KING;
@@ -142,8 +147,13 @@ public class evalFunc {
         }
         //Evaluate jumps for KING White pieces
         for (Integer i : wK_Pieces) {
-            if(b.getBottomBorder().contains(i)){
-                wValue+=KING_DEFENSE;
+//            if(b.getBottomBorder().contains(i)){
+//                wValue+=KING_DEFENSE;
+//            }
+            if(bK_Pieces.size() + bPieces.size() < 3){
+                  if(b.canJumpForwardLeft(i) || b.canJumpForwardRight(i) 
+                          || b.canJumpRearLeft(i) || b.canJumpRearRight(i))
+                      wValue += 150;
             }
             if (b.canJumpForwardLeft(i)) { // check left foward jump
                 if (bK_Pieces.contains(i + (n - 1))) {

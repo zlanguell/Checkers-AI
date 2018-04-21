@@ -16,6 +16,8 @@ public class KnightMinMaxAB {
 
     static int totalBoards = 0;
     static int totalPrune = 0;
+    static final int MAX_VALUE = 7000;
+    static final int MIN_VALUE = -8000;
 
     /**
      * @param args the command line arguments
@@ -125,7 +127,7 @@ public class KnightMinMaxAB {
             } while (!current_board.isValidMove(userMove[0], userMove[1]));
 //          current_board.moveWhite(current_board.mapValue(userMove[0]), current_board.mapValue(userMove[1]));
             current_board.printBoard();
-            turn_result = mmABGame.start(current_board, 0, Board.Player.black, Integer.MAX_VALUE, Integer.MIN_VALUE);
+            turn_result = mmABGame.start(current_board, 0, Board.Player.black, MAX_VALUE, MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -187,14 +189,14 @@ public class KnightMinMaxAB {
         int userConfirm;
         //**************Main Game Loop*********************//
         while (!current_board.getTerminal()) {
-            turn_result = mmABGame.start(current_board, 0, Board.Player.black, Integer.MAX_VALUE, Integer.MIN_VALUE);
+            turn_result = mmABGame.start(current_board, 0, Board.Player.black, MAX_VALUE,MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
             totalBoards += turn_result.boardsEvaluatedCount;
             System.out.println("Boards Evaluated: " + turn_result.boardsEvaluatedCount);
             System.out.println("Prunes: " + turn_result.pruneCount);
-            turn_result = mmABGame.start(current_board, 0, Board.Player.white, Integer.MAX_VALUE, Integer.MIN_VALUE);
+            turn_result = mmABGame.start(current_board, 0, Board.Player.white, MAX_VALUE,MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -267,7 +269,7 @@ public class KnightMinMaxAB {
         int userConfirm;
         //**************Main Game Loop*********************//
         while (!current_board.getTerminal()) {
-            turn_result = mmAB.start(current_board, 0, Board.Player.black, Integer.MAX_VALUE, Integer.MIN_VALUE);
+            turn_result = mmAB.start(current_board, 0, Board.Player.black, MAX_VALUE,MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
