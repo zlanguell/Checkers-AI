@@ -3,8 +3,10 @@ package CheckersAI;
 import java.util.ArrayList;
 
 /**
- *
- * @author Zachary
+ * This class is used as result of an algorithm. It can store the path and value
+ * of the outcome. When making moves, only the first board is used. The remaining
+ * path is used for evaluation and testing.
+ * 
  */
 public class ValueStructure {
     
@@ -13,24 +15,25 @@ public class ValueStructure {
     private ArrayList<Board> path;
 
     /**
-     *
+     * Board Count is used to evaluate complexity by counting boards the 
+     * algorithm computed values.
      */
     public int boardsEvaluatedCount=0;
 
     /**
-     *
+     * Prune count is used to evaluate unexplored branches.
      */
     public int pruneCount = 0;
 
     /**
-     *
+     * Creates a value structure with no values.
      */
     public ValueStructure() {
         path = new ArrayList<>();
     }
 
     /**
-     *
+     * Creates a value structure with path, but unassigned value.
      * @param b
      */
     public ValueStructure(Board b) {
@@ -39,7 +42,7 @@ public class ValueStructure {
     }
 
     /**
-     *
+     * Creates a valued structure with no path.
      * @param v
      */
     public ValueStructure (int v){
@@ -47,7 +50,7 @@ public class ValueStructure {
     }
 
     /**
-     *
+     * Sets the structure to board value and path to board.
      * @param v
      * @param b
      */
@@ -58,7 +61,7 @@ public class ValueStructure {
     }
 
     /**
-     *
+     * Returns the value.
      * @return
      */
     public int getValue() {
@@ -66,7 +69,7 @@ public class ValueStructure {
     }
 
     /**
-     *
+     * Sets the value.
      * @param value
      */
     public void setValue(int value) {
@@ -80,7 +83,7 @@ public class ValueStructure {
 //    }
 
     /**
-     *
+     * Returns path to final node of the value structure.
      * @return
      */
     public ArrayList<Board> getPath() {
@@ -88,7 +91,7 @@ public class ValueStructure {
     }
 
     /**
-     *
+     * Adds a node to path.
      * @param newPathNode
      */
     public void addToPath(Board newPathNode) {
@@ -98,7 +101,7 @@ public class ValueStructure {
     }
 
     /**
-     *
+     * Adds multiple node path.
      * @param newPath
      */
     public void addToPath(ArrayList<Board> newPath) {

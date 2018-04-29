@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author Zachary
+ * 
  */
-public class KnightMinMaxAB {
+public class checkersAI {
 
     static int totalBoards = 0;
     static int totalPrune = 0;
-    static final int MAX_VALUE = 7000;
+    static final int MAX_VALUE = 10000;
     static final int MIN_VALUE = -8000;
 
     /**
@@ -114,7 +114,7 @@ public class KnightMinMaxAB {
     private static void playerVsComputer() {
         minMaxAB mmABGame = new minMaxAB();
         ValueStructure turn_result;
-//        ValueStructure turn_result = mmABGame.start(Board.getStartBoard(), 0, Board.Player.black,
+//        ValueStructure turn_result = mmABGame.start(Board.getStartBoard(), 0, Board.Player.max,
 //                Integer.MAX_VALUE, Integer.MIN_VALUE);
 //        Board current_board = turn_result.getPath().get(0).cloneBoard();
         Board current_board = Board.getStartBoard();
@@ -127,7 +127,7 @@ public class KnightMinMaxAB {
             } while (!current_board.isValidMove(userMove[0], userMove[1]));
 //          current_board.moveWhite(current_board.mapValue(userMove[0]), current_board.mapValue(userMove[1]));
             current_board.printBoard();
-            turn_result = mmABGame.start(current_board, 0, Board.Player.black, MAX_VALUE, MIN_VALUE);
+            turn_result = mmABGame.start(current_board, 0, Board.Player.max, MAX_VALUE, MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -150,7 +150,7 @@ public class KnightMinMaxAB {
      */
     public static void playerVsComputer2() {
         AlphaBetaSearch mmABGame = new AlphaBetaSearch();
-        ValueStructure turn_result = mmABGame.start(Board.getStartBoard(), Board.Player.black);
+        ValueStructure turn_result = mmABGame.start(Board.getStartBoard(), Board.Player.max);
         Board current_board = turn_result.getPath().get(0).cloneBoard();
         current_board.printBoard();
         String[] userMove;
@@ -161,7 +161,7 @@ public class KnightMinMaxAB {
             } while (!current_board.isValidMove(userMove[0], userMove[1]));
 //          current_board.moveWhite(current_board.mapValue(userMove[0]), current_board.mapValue(userMove[1]));
             current_board.printBoard();
-            turn_result = mmABGame.start(current_board, Board.Player.black);
+            turn_result = mmABGame.start(current_board, Board.Player.max);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -189,14 +189,14 @@ public class KnightMinMaxAB {
         int userConfirm;
         //**************Main Game Loop*********************//
         while (!current_board.getTerminal()) {
-            turn_result = mmABGame.start(current_board, 0, Board.Player.black, MAX_VALUE,MIN_VALUE);
+            turn_result = mmABGame.start(current_board, 0, Board.Player.max, MAX_VALUE,MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
             totalBoards += turn_result.boardsEvaluatedCount;
             System.out.println("Boards Evaluated: " + turn_result.boardsEvaluatedCount);
             System.out.println("Prunes: " + turn_result.pruneCount);
-            turn_result = mmABGame.start(current_board, 0, Board.Player.white, MAX_VALUE,MIN_VALUE);
+            turn_result = mmABGame.start(current_board, 0, Board.Player.min, MAX_VALUE,MIN_VALUE, 2);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -215,11 +215,11 @@ public class KnightMinMaxAB {
         //*****************End Main Game Loop*******************//
     }
 
-    //THIS FUNCTION PLAYS TWO ALPHA-BETA SEARCH ALGORITHMS AGAINST EACH OTHER
-    //  Each uses a different evaluation function, black with primary
+    
 
     /**
-     *
+     *THIS FUNCTION PLAYS TWO ALPHA-BETA SEARCH ALGORITHMS AGAINST EACH OTHER
+     *  Each uses a different evaluation function, max with primary
      */
     public static void computerVsComputer2() {
         AlphaBetaSearch mmABGame = new AlphaBetaSearch();
@@ -228,7 +228,7 @@ public class KnightMinMaxAB {
         int userConfirm;
         //**************Main Game Loop*********************//
         while (!current_board.getTerminal()) {
-            turn_result = mmABGame.start(current_board, Board.Player.black);
+            turn_result = mmABGame.start(current_board, Board.Player.max);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -236,7 +236,7 @@ public class KnightMinMaxAB {
             System.out.println("Boards Evaluated: " + turn_result.boardsEvaluatedCount);
             System.out.println("Prunes: " + turn_result.pruneCount);
             if (!current_board.getTerminal()) {
-                turn_result = mmABGame.start(current_board, Board.Player.white, 2);
+                turn_result = mmABGame.start(current_board, Board.Player.min, 2);
                 current_board = turn_result.getPath().get(0).cloneBoard();
                 current_board.printBoard();
                 totalPrune += turn_result.pruneCount;
@@ -269,7 +269,7 @@ public class KnightMinMaxAB {
         int userConfirm;
         //**************Main Game Loop*********************//
         while (!current_board.getTerminal()) {
-            turn_result = mmAB.start(current_board, 0, Board.Player.black, MAX_VALUE,MIN_VALUE);
+            turn_result = mmAB.start(current_board, 0, Board.Player.max, MAX_VALUE,MIN_VALUE);
             current_board = turn_result.getPath().get(0).cloneBoard();
             current_board.printBoard();
             totalPrune += turn_result.pruneCount;
@@ -277,7 +277,7 @@ public class KnightMinMaxAB {
             System.out.println("Boards Evaluated: " + turn_result.boardsEvaluatedCount);
             System.out.println("Prunes: " + turn_result.pruneCount);
             if (!current_board.getTerminal()) {
-                turn_result = ABS.start(current_board, Board.Player.white);
+                turn_result = ABS.start(current_board, Board.Player.min);
                 current_board = turn_result.getPath().get(0).cloneBoard();
                 current_board.printBoard();
                 totalPrune += turn_result.pruneCount;

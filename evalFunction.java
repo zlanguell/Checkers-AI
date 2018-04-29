@@ -10,9 +10,9 @@ import java.util.Random;
 
 /**
  *
- * @author Zachary
+ * 
  */
-public class evalFunc {
+public class evalFunction {
 
     private static final int PAWN_VALUE = 200;
     private static final int FORWARD_PAWN_VALUE = 75;
@@ -21,7 +21,7 @@ public class evalFunc {
     private static final int JUMP_PAWN = 25;
     private static final int JUMP_KING = 50;
     private static final int KING_DEFENSE = 35;
-
+    
     /**
      *
      * @param b
@@ -36,8 +36,8 @@ public class evalFunc {
         ArrayList<Integer> bPieces = b.getBlack();
         ArrayList<Integer> bK_Pieces = b.getkBlack();
         int n = b.getDIMENSION();
-        //float wratio = ((wPieces.size()+ wK_Pieces.size())/(bPieces.size() + bK_Pieces.size() + 1));        
-        //float bratio = ((bPieces.size()+ bK_Pieces.size())/(wPieces.size() + wK_Pieces.size() + 1));        
+        float wratio = ((wPieces.size()+ wK_Pieces.size())/(bPieces.size() + bK_Pieces.size() + 1));        
+        float bratio = ((bPieces.size()+ bK_Pieces.size())/(wPieces.size() + wK_Pieces.size() + 1));        
         
         
         bValue += b.getBlack().size() * PAWN_VALUE;
@@ -185,22 +185,16 @@ public class evalFunc {
                 }
             }
         }
-//        if(p == minMaxAB.Player.black){return (int)bValue;}
+//        if(p == minMaxAB.Player.max){return (int)bValue;}
 //        return (int)wValue;
         
-        if (p == Board.Player.black) {
+        if (p == Board.Player.max) {
             return (int) (bValue - wValue);
-        } 
-        else if (b.getTerminal() && p == Board.Player.white) {
-            return (-1) * (int) (bValue - wValue);
-        }
+        }         
         return (int) (wValue - bValue);
 //          return (int) (bValue-wValue);
-    }
-    
-    
-    //WRITTEN BY NEERAJ JADHAV
-
+    }    
+        
     /**
      *
      * @param b
@@ -230,7 +224,7 @@ public class evalFunc {
                 bValue += 50;
             }
         }
-        //Evaluate black king pieces
+        //Evaluate max king pieces
         for (Integer i : bK_Pieces) {
             if (b.canJumpForwardLeft(i) || b.canJumpRearLeft(i) || b.canJumpForwardRight(i) || b.canJumpRearRight(i)) { // check left foward jump
                 bValue += 50;
@@ -241,7 +235,7 @@ public class evalFunc {
 
             }
         }
-        //Evaluate jumps for white pieces
+        //Evaluate jumps for min pieces
         for (Integer i : wPieces) {
             if (b.canJumpForwardLeft(i) || b.canJumpForwardRight(i)) // check left foward jump
             {
@@ -255,10 +249,10 @@ public class evalFunc {
             }
         }
 
-        if (p == Board.Player.black) {
+        if (p == Board.Player.max) {
             return (bValue);
         } else {
-            return (-1) * (wValue);
+            return (wValue);
         }        
 }
 

@@ -86,6 +86,7 @@ public class Board {
     private ArrayList<Integer> kWhite = new ArrayList<>();
     private float value;
     private boolean terminal;
+    
     public enum Player {
 
         /**
@@ -93,12 +94,12 @@ public class Board {
          *//**
          *
          */
-        white,
+        min,
 
         /**
          *
          */
-        black
+        max
     }
     /**
      *
@@ -142,11 +143,11 @@ public class Board {
     public int mapValue(String s) {
         return boardMapper.get(s);
     }
-
+    
     /**
      *
      * @return
-     */
+     */     
     public static Board getStartBoard() {
         Board b = new Board();
         b.setBlack(new ArrayList<>(Arrays.asList(2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 22, 24)));
@@ -613,6 +614,252 @@ public class Board {
             return true;
         }
         return false;
+    }
+    
+    public static ArrayList<Board> moveGen(Board b, Player p){
+       if(p == Player.max){
+           return maxMoveGen(b);
+       } 
+       return minMoveGen(b);
+    }
+    
+    private static ArrayList<Board> maxMoveGen(Board current) {
+        int n = current.getDIMENSION();
+        ArrayList<Integer> bPieces = current.getBlack();
+        ArrayList<Integer> wPieces = current.getWhite();
+        ArrayList<Integer> bkPieces = current.getkBlack();
+        ArrayList<Integer> wkPieces = current.getkWhite();        
+        ArrayList<Board> children = new ArrayList<>();
+        Board child;
+
+        ///**************************BLACK*********************************///
+        
+            //**********************BLACK PIECE MOVE GENERATION**********************//
+            for (int p : bPieces) {
+                /*************************Left Side Empty or Jump**************/
+                if (current.canMoveForwardLeft(p)) { //check forward left for empty
+                    child = current.cloneBoard();
+                    child.moveBlack(p, p + (n - 1)); //move max piece to empty square
+                    children.add(child);
+                } 
+                else if (current.canJumpForwardLeft(p)) { //Jump the min piece
+                    child = current.cloneBoard();
+                    child.moveBlack(p, p + (2 * (n - 1))); //Move Black Piece
+                    child.moveWhite(p + (n - 1), 0); //Delete Jumped White piece
+                    children.add(child);
+                }
+                /*************************End Left Side Check******************/
+
+                /************************Right Side Empty or Jump**************/
+                if (current.canMoveForwardRight(p)) { //check forward right for empty
+                    child = current.cloneBoard();
+                    child.moveBlack(p, p + (n + 1)); //move token to forward right
+                    children.add(child);
+                } 
+                else if (current.canJumpForwardRight(p)) { //Jump White Piece
+                    child = current.cloneBoard();
+                    child.moveBlack(p, p + (2 * (n + 1))); //move max piece
+                    child.moveWhite(p + (n + 1), 0); //remove jumped min token
+                    children.add(child);
+                }
+                /**************************End Right Side Check****************/
+            }
+            //********************END BLACK PIECE MOVE GENERATION*****************//
+
+            //**********************BLACK KING MOVE GENERATION**********************//
+            for (int k : bkPieces) {
+                /**
+                 * *******************Left Side Empty or
+                 * Jump************************
+                 */
+
+                if (current.canMoveForwardLeft(k)) {//CHECK LEFT FRONT FOR EMPTY SPACE
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k + (n - 1)); //move max token to empty square
+                    children.add(child);
+                } else if (current.canJumpForwardLeft(k)) {
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k + (2 * (n - 1)));
+                    child.moveWhite(k + (n - 1), 0);
+                    children.add(child);
+                }
+
+                if (current.canMoveRearLeft(k)) {//CHECK LEFT REAR FOR EMPTY
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k - (n + 1)); //move max token to empty spot
+                    children.add(child);
+                } else if (current.canJumpRearLeft(k)) {
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k - (2 * (n + 1)));
+                    child.moveWhite(k - (n + 1), 0);
+                    children.add(child);
+
+                }
+                /**
+                 * *********************End Left Side
+                 * Checks*************************
+                 */
+
+                /**
+                 * **************************Right Side Empty or
+                 * Jump**************
+                 */
+                if (current.canMoveForwardRight(k)) {//CHECK RIGHT FORWARD FOR EMPTY
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k + (n + 1)); //move max token forward right to empty space
+                    children.add(child);
+
+                } else if (//CHECK RIGHT FORWARD FOR JUMP
+                        current.canJumpForwardRight(k)) {
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k + (2 * (n + 1)));
+                    child.moveWhite(k + (n + 1), 0);
+                    children.add(child);
+                }
+
+                if (current.canMoveRearRight(k)) {//CHECK RIGHT REAR FOR EMPTY
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k - (n - 1)); //move max king right rear to empty space
+                    children.add(child);
+
+                } else if (//CHECK RIGHT REAR FOR JUMP
+                        current.canJumpRearRight(k)) {
+                    child = current.cloneBoard();
+                    child.moveBlack(k, k - (2 * (n - 1)));
+                    child.moveWhite(k - (n - 1), 0);
+                    children.add(child);
+                }
+                /**
+                 * *********************End Right Side
+                 * Checks*************************
+                 */
+            }
+            //********************END BLACK KING MOVE GENERATION*****************//
+         ///************************END BLACK*******************************///       
+        
+        return children; //RETURN ALL GENERATED CHILDREN
+    }
+    
+    private static ArrayList<Board> minMoveGen(Board current) {
+        int n = current.getDIMENSION();
+        ArrayList<Integer> bPieces = current.getBlack();
+        ArrayList<Integer> wPieces = current.getWhite();
+        ArrayList<Integer> bkPieces = current.getkBlack();
+        ArrayList<Integer> wkPieces = current.getkWhite();        
+        ArrayList<Board> children = new ArrayList<>();
+        Board child;
+        ///**************************WHITE*********************************///		
+        
+            //**********************WHITE PIECE MOVE GENERATION**********************//
+            for (int p : wPieces) {
+                /**
+                 * ***********************Left Side Empty or
+                 * Jump************************
+                 */
+                if (current.canMoveRearLeft(p)) { //check left rear for empty
+                    child = current.cloneBoard();
+                    child.moveWhite(p, p - (n + 1));
+                    children.add(child);
+                } else if ( //CHECK LEFT REAR FOR JUMP
+                        current.canJumpRearLeft(p)) {
+                    child = current.cloneBoard();
+                    child.moveWhite(p, p - (2 * (n + 1))); //move min token
+                    child.moveBlack(p - (n + 1), 0);  //remove jumped max token
+                    children.add(child);
+                }
+                /**
+                 * ***********************End Left Side
+                 * Check****************************
+                 */
+
+                /**
+                 * **********************Right Side Empty or
+                 * Jump************************
+                 */
+                if (current.canMoveRearRight(p)) { //check rear right for empty
+                    child = current.cloneBoard();
+                    child.moveWhite(p, p - (n - 1)); //move min token right rear
+                    children.add(child);
+
+                } else if ( //check for right rear jump
+                        current.canJumpRearRight(p)) {
+                    child = current.cloneBoard();
+                    child.moveWhite(p, p - (2 * (n - 1))); //move min piece
+                    child.moveBlack(p - (n - 1), 0); //delete max piece
+                    children.add(child);
+                }
+            }
+            /***********************End Right Side Check***********************/
+        
+        //********************END WHITE PIECE MOVE GENERATION*****************//
+        //**********************WHITE KING MOVE GENERATION**********************//
+        for (int k : wkPieces) {
+            /************************Left Side Empty or Jump*******************/
+            if (current.canMoveRearLeft(k)) {//check left rear for empty
+                child = current.cloneBoard();
+                child.moveWhite(k, k - (n + 1));
+                children.add(child);
+            } else if ( // check left rear for jump
+                    current.canJumpRearLeft(k)) {
+                child = current.cloneBoard();
+                child.moveWhite(k, k - (2 * (n + 1))); //move min king
+                child.moveBlack(k - (n + 1), 0); //remove jumped max token
+                children.add(child);
+            }
+
+            if (current.canMoveForwardLeft(k)) {//check forward left for empty
+                child = current.cloneBoard();
+                child.moveWhite(k, k + (n - 1)); //move left forward
+                children.add(child);
+            } else if (//check left forward for jump
+                    current.canJumpForwardLeft(k)) {
+                child = current.cloneBoard();
+                child.moveWhite(k, k + (2 * (n - 1))); //move min king
+                child.moveBlack(k + (n - 1), 0); //remove jumped max token
+                children.add(child);
+            }
+            /*******************End Left Side Check****************************/
+            
+            /*****************Right Side Empty or Jump*************************/
+            if (current.canMoveRearRight(k)) { //check rear right for empty
+                child = current.cloneBoard();
+                child.moveWhite(k, k - (n - 1)); //move min token right rear
+                children.add(child);
+            } else if ( //check for right rear jump
+                    current.canJumpRearRight(k)) {
+                child = current.cloneBoard();
+                child.moveWhite(k, k - (2 * (n - 1))); //move min piece
+                child.moveBlack(k - (n - 1), 0); //delete max piece
+                children.add(child);
+            }
+
+            if (current.canMoveForwardRight(k)) { //check front right for empty
+                child = current.cloneBoard();
+                child.moveWhite(k, k + (n + 1)); //move min token right front
+                children.add(child);
+            } else if ( //check for right front jump
+                    current.canJumpForwardRight(k)) {
+                child = current.cloneBoard();
+                child.moveWhite(k, k + (2 * (n + 1))); //move min piece
+                child.moveBlack(k + (n + 1), 0); //delete max piece
+                children.add(child);
+            }
+            /**
+             * *****************End Right Side Check***************************
+             */
+            //********************END WHITE KING MOVE GENERATION*****************//
+        
+        ///************************END WHITE*******************************///
+        
+        }
+        return children;
+    }
+    
+    public static Player switchPlayer(Player currPlayer) {
+        if (currPlayer == Player.max) {
+            return Player.min;
+        }
+        return Player.max;
     }
     
 //***************END MOVE VALIDATION************************//
