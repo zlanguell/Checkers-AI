@@ -31,6 +31,7 @@ public class Board {
      */
     public int depth;
     private static final int DIMENSION = 8;
+    private static final int MAX_GAME_LENGTH =256;
     private HashMap<String, Integer> boardMapper = new HashMap<>();
     ArrayList<Integer> rightBorder = new ArrayList<Integer>() {
         {
@@ -160,6 +161,13 @@ public class Board {
      * @return
      */
     public boolean getTerminal() {
+        return this.terminal;
+    }
+    
+        public boolean getTerminal(int pathLength) {
+        if(pathLength > MAX_GAME_LENGTH)
+            return true;
+        
         return this.terminal;
     }
 

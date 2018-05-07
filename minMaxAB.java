@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class minMaxAB {
 
-    private static final int MAX_DEPTH = 6;
+    private static final int MAX_DEPTH = 10;
     private static int scoreOption = 1;
 
     /**
@@ -36,7 +36,7 @@ public class minMaxAB {
         if (deepEnough(depth)) {
             currValueStructure.boardsEvaluatedCount++;
             currValueStructure.setValue(Static(position, player));
-            //currValueStructure.addToPath(position); //should be null
+            //currValueStructure.addToPath(position); //should be null         
             return currValueStructure;
         }
 
@@ -55,7 +55,7 @@ public class minMaxAB {
         }
 
         for (Board v : successors) {
-            ValueStructure resultSucc = minMax(v, (depth + 1), Board.switchPlayer(player), ((-1) * passThresh), ((-1) * useThresh));
+            ValueStructure resultSucc = minMax(v, (++depth), Board.switchPlayer(player), ((-1) * passThresh), ((-1) * useThresh));
             currValueStructure.boardsEvaluatedCount += resultSucc.boardsEvaluatedCount;
             currValueStructure.pruneCount += resultSucc.pruneCount;
             int newValue = ((resultSucc.getValue() * (-1))); //new value
